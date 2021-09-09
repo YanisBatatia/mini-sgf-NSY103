@@ -3,18 +3,19 @@
 //
 #include <stdio.h>
 #include "sgf_disk.h"
-#include "sgf_block.h"
 #include "sgf_fat.h"
+#include "sgf_inode.h"
+#include "sgf-io.h"
 
 int main() {
     init_sgf_disk("Disk0.bin");
     init_sgf_fat();
-    int first_empty_block = block_allocation();
-    /*printf("%d \n",first_empty_block);*/
-    set_in_fat(300,14);
-    for (int i = 0; i < 350; ++i) {
-        printf("%d ", get_in_fat(i));
-    }
 
-    printf("\n %d ", get_in_fat(300));
+    OFILE* file = sgf_open("test.txt", WRITE_MODE);
+    sgf_puts(file, "FUCK le C");
+    sgf_close(file);
+
+    OFILE* Rfile = sgf_open("test.txt", READ_MODE);
+    int c = sgf_getc(Rfile);
+    printf("%d", c);
 }

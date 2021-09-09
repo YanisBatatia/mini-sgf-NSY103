@@ -6,15 +6,15 @@
 #include "sgf_fat.h"
 #include "sgf_types.h"
 #include "sgf_disk.h"
-#include "sgf_block.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#define FREE (-1)
-#define RESERVED (-2)
-#define INODE (-3)
-#define EOFI (-4)
+#define FREE        (-1)
+#define RESERVED    (-2)
+#define INODE       (-3)
+#define EOFI        (-4)
+
 
 typedef struct {
     int size_in_block;
@@ -46,24 +46,6 @@ void save_in_fat (int n )
 */
 }
 
-void save_fat (void)
-{
-    BLOCK *blocks = (BLOCK *) fat.block_contents;
-
-    for(int k = 1, i = 0; (k < fat.size_in_block); k++, i++){
-        write_block(k , blocks + i);
-    }
-}
-
-void get_fat (void)
-{
-    BLOCK *blocks = (BLOCK *) fat.block_contents;
-
-    for(int k = 1, i = 0; (k < fat.size_in_block); k++, i++){
-        read_block(k , blocks + i);
-    }
-}
-
 void set_in_fat (int n, int valeur)
 {
     int disk_size_in_block = get_disk_size();
@@ -88,7 +70,7 @@ int get_in_fat (int i)
     int disk_size_in_block = get_disk_size();
 
     if (i < 0  ||  i >= disk_size_in_block)
-        fprintf(stderr,"Problem in get_in_fat");
+        fprintf(stderr,"Problem in get_in_fat %d", i);
 
     return fat.block_contents[ i ];
 }

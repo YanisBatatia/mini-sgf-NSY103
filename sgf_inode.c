@@ -3,10 +3,17 @@
 //
 
 #include <string.h>
-#include "sgf_inode.h"
+#include <stdio.h>
 #include "sgf_types.h"
-#include "sgf_block.h"
-#include "sgf_fat.c"
+#include "sgf_fat.h"
+#include "sgf_disk.h"
+#include "sgf_inode.h"
+
+#define FREE        (-1)
+#define RESERVED    (-2)
+#define INODE       (-3)
+#define EOFI        (-4)
+
 
 int find_inode(const char* name)
 {
@@ -131,7 +138,7 @@ void list_directory (void)
             if (b.dir[j].block_position > 0)
             {
                 read_block(b.dir[j].block_position,&b2.data);
-                printf("%s : Taille : %d\n",b.dir[j].filename, b2.inode.size_file);
+                printf("%s : Taille : %ld\n",b.dir[j].filename, b2.inode.size_file);
             }
         }
         adr = get_in_fat(adr);

@@ -5,6 +5,7 @@
 #ifndef MINI_SGF_NSY103_SGF_FAT_H
 #define MINI_SGF_NSY103_SGF_FAT_H
 
+
 void init_sgf_fat();
 
 void save_in_fat (int n);

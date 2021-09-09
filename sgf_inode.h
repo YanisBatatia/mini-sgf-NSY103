@@ -11,6 +11,7 @@ int add_inode (const char* name, int block_inode);
 
 void delete_inode (const char* name);
 
+void list_directory (void);
 
 
 #endif //DEVOIRSGF_SGF_SGF_INODE_H
