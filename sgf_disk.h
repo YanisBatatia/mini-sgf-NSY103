@@ -5,7 +5,7 @@
 #ifndef MINI_SGF_NSY103_SGF_DISK_H
 #define MINI_SGF_NSY103_SGF_DISK_H
 
-int init_sgf_disk(char* name);
+void init_sgf_disk(char* name);
 
 long get_disk_size();
 

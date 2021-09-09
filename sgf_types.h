@@ -21,7 +21,7 @@ typedef struct {
 } INODE;
 
 typedef struct  {
-    int racine; // Adresse du premier DIR
+    int adr_racine; // Adresse du premier DIR
 } SBLOCK; // BLOCK de definition systeme
 
 typedef struct {
@@ -32,10 +32,10 @@ typedef struct {
 typedef DIR_ENTRY DIR [DIR_SIZE]; // Repertoire
 
 typedef union {
-    RACINE racine;
+    SBLOCK racine;
     DIR dir;
     INODE inode;
     BLOCK data;
-} BLOCK; // Block generique
+} GBLOCK; // Block generique
 
 #endif
