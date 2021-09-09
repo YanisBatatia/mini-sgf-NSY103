@@ -7,8 +7,10 @@
 
 #include <stddef.h>
 
-#define BLOCK_SIZE (128)
-typedef char BLOCK[ BLOCK_SIZE ];
+#define BLOCK_SIZE (1024)
+#define DIR_SIZE (BLOCK_SIZE / sizeof(DIR_ENTRY))
+
+typedef char BLOCK[ BLOCK_SIZE ]; // DATA
 
 typedef struct {
     int first_block;
@@ -18,9 +20,22 @@ typedef struct {
     int permissions[8];
 } INODE;
 
+typedef struct  {
+    int racine; // Adresse du premier DIR
+} SBLOCK; // BLOCK de definition systeme
+
 typedef struct {
-    char filename;
+    char filename [28];
     int block_position;
-} DIR;
+} DIR_ENTRY;
+
+typedef DIR_ENTRY DIR [DIR_SIZE]; // Repertoire
+
+typedef union {
+    RACINE racine;
+    DIR dir;
+    INODE inode;
+    BLOCK data;
+} BLOCK; // Block generique
 
 #endif
