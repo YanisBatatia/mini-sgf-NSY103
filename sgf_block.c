@@ -5,15 +5,12 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-
-#define BLOCK_SIZE              (128)
-
-typedef char BLOCK[ BLOCK_SIZE ];
-
+#include "sgf_types.h"
+#include "sgf_block.h"
 
 static struct HARD_DISK {
     FILE*   file;
-    int     size;
+    long     size;
     int     exist;
     int     scaned;
     char    nom[32];
@@ -33,10 +30,16 @@ int init_sgf_disk(char* name){
     dd.exist = 1;
     dd.scaned = 1;
     strcpy(dd.nom, name);
-
     fclose(file);
-    return (1);
 
+    return (1);
+}
+
+int init_dir(){
+
+
+
+    return (1);
 }
 
 void read_block(int n, BLOCK* bloc)
@@ -46,7 +49,7 @@ void read_block(int n, BLOCK* bloc)
         if (BLOCK_SIZE == fread(bloc, 1, BLOCK_SIZE, dd.file))
         {
             fprintf(stdout, "read block %d\n", n);
-            return ;
+            return;
         }
 
 }
@@ -69,7 +72,7 @@ void write_block(int n, BLOCK* b)
         }
 }
 
-int get_disk_size()
+long get_disk_size()
 {
     if (!dd.exist) init_sgf_disk("Disk0.bin");
 
