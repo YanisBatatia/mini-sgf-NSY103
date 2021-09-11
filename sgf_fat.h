@@ -7,7 +7,7 @@
 
 void init_sgf_fat();
 
-void save_in_fat (void);
+void save_in_fat (int n);
 
 void set_in_fat (int n, int valeur);
 

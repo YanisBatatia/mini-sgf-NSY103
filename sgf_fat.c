@@ -23,13 +23,44 @@ typedef struct {
 
 static FAT fat = {0, NULL};
 
-void save_in_fat (void)
+void save_in_fat (int n )
 {
+    int valeur = fat.block_contents[ n ] ;
+    int element_fat_size = BLOCK_SIZE / sizeof(int);
+    int fat_block_position = (n / element_fat_size) + 1;
+    int decallage = n - (element_fat_size * (fat_block_position - 1));
+
+    printf("decallage : %d \n", decallage);
+    char data[sizeof(valeur)];
+    sprintf(data,"%d", valeur);
+
+    write_in_block(fat_block_position, sizeof(int), data, decallage);
+
+/*
     int k;
     BLOCK *blocks;
 
     for(k = 1; (k < fat.size_in_block); k++){
         write_block(k , & blocks[k]);
+    }
+*/
+}
+
+void save_fat (void)
+{
+    BLOCK *blocks = (BLOCK *) fat.block_contents;
+
+    for(int k = 1, i = 0; (k < fat.size_in_block); k++, i++){
+        write_block(k , blocks + i);
+    }
+}
+
+void get_fat (void)
+{
+    BLOCK *blocks = (BLOCK *) fat.block_contents;
+
+    for(int k = 1, i = 0; (k < fat.size_in_block); k++, i++){
+        read_block(k , blocks + i);
     }
 }
 
@@ -38,7 +69,7 @@ void set_in_fat (int n, int valeur)
     int disk_size_in_block = get_disk_size();
 
     if (n < 0  ||  n >= disk_size_in_block)
-        fprintf(stderr,"Problem in set_in_fat");
+        fprintf(stderr,"Problem in set_in_fat : index out of bound");
 
     assert(
             ((valeur) == FREE) ||
@@ -48,7 +79,7 @@ void set_in_fat (int n, int valeur)
     );
 
     fat.block_contents[ n ] = valeur;
-    save_in_fat ();
+    save_in_fat(n);
 }
 
 
@@ -67,9 +98,11 @@ int block_allocation (void)
     int k;
     int disk_size_in_block = get_disk_size();
 
-    for(k = 0; k < disk_size_in_block; k++)
-        if (fat.block_contents[k] == FREE)
+    for(k = 0; k < disk_size_in_block; k++) {
+        if (fat.block_contents[k] == FREE) {
             return (k);
+        }
+    }
 
     return (-1);
 }
@@ -92,7 +125,7 @@ void init_sgf_fat(){
     fat.block_contents[0] = RESERVED;
 
     int i;
-    for (i=1; i < fat.size_in_block; i++){
+    for (i=1; i < fat.size_in_block + 1; i++){
         fat.block_contents[i] = RESERVED;
     }
 

@@ -47,6 +47,23 @@ void write_block(int n, BLOCK* b)
         }
 }
 
+void write_in_block(int n, char data_size, char* data, int decallage)
+{
+    if (!dd.exist) init_sgf_disk("Disk0.bin");
+
+    if (n < 0  ||  n >= dd.size)
+    {
+        fprintf(stderr, "sgf-disk: write_block: n° de bloc incorrect.");
+    }
+
+    if (fseek(dd.file, ((n - 1) * BLOCK_SIZE) + decallage, SEEK_SET) == 0)
+        if (BLOCK_SIZE == fwrite(data, 1, data_size, dd.file))
+        {
+            fflush(dd.file);
+            fprintf(stdout, "write block %d\n", n);
+        }
+}
+
 long get_disk_size()
 {
     if (dd.exist){
